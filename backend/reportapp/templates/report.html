@@ -1,0 +1,27 @@
+<h2>탄소 절감 결과</h2>
+<p>포장재: {{ result.material }}</p>
+<p>기존 부피: {{ result.old_volume }} m³</p>
+<p>AI 최적화 부피: {{ result.new_volume }} m³</p>
+<p>감소 질량: {{ result.saved_mass|floatformat:2 }} kg</p>
+<p>절감 탄소배출량: {{ result.saved_emission|floatformat:2 }} kg CO2-eq</p>
+
+<h2>GPT 리포트</h2>
+<p>{{ report|linebreaks }}</p>
+
+<!-- PDF 다운로드 버튼 -->
+<form method="post">
+  {% csrf_token %}
+  <input type="hidden" name="old_volume" value="{{ result.old_volume }}">
+  <input type="hidden" name="new_volume" value="{{ result.new_volume }}">
+  <input type="hidden" name="material" value="{{ result.material }}">
+  <button type="submit" name="download_pdf" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; margin-top: 10px;">
+    📄 PDF 다운로드
+  </button>
+</form>
+
+{% if pdf_error %}
+<p style="color: red;">{{ pdf_error }}</p>
+{% endif %}
+
+<br>
+<a href="/report/">다시 계산하기</a>
